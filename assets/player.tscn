@@ -1,20 +1,25 @@
-[gd_scene format=3 uid="uid://36cmhack85o8"]
+[gd_scene format=3 uid="uid://b8rv248nmivdk"]
+
+[ext_resource type="Script" uid="uid://bvad1jrhnq5tu" path="res://assets/Controler.cs" id="1_si3wx"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_ai20r"]
 size = Vector3(1.2, 1, 1.2)
 
-[node name="Player" type="Node3D" unique_id=103038204]
+[node name="TempCharacter" type="CharacterBody3D" unique_id=1436382204 node_paths=PackedStringArray("camera")]
+script = ExtResource("1_si3wx")
+Speed = 8.0
+camera = NodePath("Head/Camera3D")
 
-[node name="CharacterBody3D" type="CharacterBody3D" parent="." unique_id=1400798744]
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="CharacterBody3D" unique_id=1086449802]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=1802927478]
 shape = SubResource("BoxShape3D_ai20r")
 
-[node name="Body" type="Node3D" parent="CharacterBody3D" unique_id=916224031]
+[node name="Body" type="Node3D" parent="." unique_id=924777277]
 
-[node name="CSGBox3D" type="CSGBox3D" parent="CharacterBody3D/Body" unique_id=1341465127]
+[node name="CSGBox3D" type="CSGBox3D" parent="Body" unique_id=476388780]
 
-[node name="Head" type="Node3D" parent="CharacterBody3D" unique_id=1945011098]
+[node name="Head" type="Node3D" parent="." unique_id=1941479842]
 
-[node name="Camera3D" type="Camera3D" parent="CharacterBody3D/Head" unique_id=1590166460]
+[node name="Camera3D" type="Camera3D" parent="Head" unique_id=1046607883]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=958403024]
