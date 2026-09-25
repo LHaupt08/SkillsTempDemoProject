@@ -1,0 +1,38 @@
+[gd_scene format=3 uid="uid://1rrg8owl1pr3"]
+
+[ext_resource type="Script" uid="uid://d4nkx7mk6mwx1" path="res://assets/CharacterBody3d.cs" id="1_5fi65"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_ai20r"]
+size = Vector3(1.2, 1, 1.2)
+
+[node name="CharacterBody3D" type="CharacterBody3D" unique_id=1698073003 node_paths=PackedStringArray("camera")]
+script = ExtResource("1_5fi65")
+camera = NodePath("Head/Camera3D")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=30223623]
+transform = Transform3D(0.85, 0, 0, 0, 1, 0, 0, 0, 0.85, 0, 0, 0)
+shape = SubResource("BoxShape3D_ai20r")
+
+[node name="Body" type="Node3D" parent="." unique_id=428080589]
+
+[node name="CSGBox3D" type="CSGBox3D" parent="Body" unique_id=130888540]
+
+[node name="Head" type="Node3D" parent="." unique_id=116892811]
+
+[node name="Camera3D" type="Camera3D" parent="Head" unique_id=2089934196]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+
+[node name="ColorRect" type="ColorRect" parent="Head/Camera3D" unique_id=705632870]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -20.0
+offset_right = -15.0
+offset_bottom = -15.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
