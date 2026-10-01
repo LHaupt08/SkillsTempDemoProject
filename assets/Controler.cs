@@ -27,7 +27,7 @@ public partial class Controler : CharacterBody3D
     [Export]
     public string input_accept = "ui_accept";
 	[Export]
-	public string input_release = "KEY_ESCAPE";
+	public string input_release = "ui_cancel";
 
 
     public override void _PhysicsProcess(double delta)
@@ -90,4 +90,34 @@ public partial class Controler : CharacterBody3D
             _mouseDelta += mouseMotion.Relative;
         }
     }
+
+        // Called when the node enters the scene tree for the first time.
+        public override void _Ready()
+        {
+            SetPaused(false);
+        }
+
+        // Called every frame. 'delta' is the elapsed time since the previous frame.
+        public override void _Process(double delta)
+        {
+            if (Input.IsActionJustPressed(input_release))
+            {
+                SetPaused(!GetTree().Paused);
+            }
+        }
+
+        public void SetPaused(bool paused)
+        {
+            GetTree().Paused = paused;
+
+            if (paused)
+            {
+                Input.MouseMode = Input.MouseModeEnum.Visible;
+            }
+            else
+            {
+                Input.MouseMode = Input.MouseModeEnum.Captured;
+            }
+        }
+    
 }
