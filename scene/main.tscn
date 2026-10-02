@@ -14,6 +14,9 @@ background_mode = 2
 sky = SubResource("Sky_wp4xf")
 glow_enabled = true
 
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ai20r"]
+albedo_color = Color(0.90605134, 0.5231698, 0.34170476, 1)
+
 [node name="main" type="Node3D" unique_id=1415652804]
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=1201690904]
@@ -29,3 +32,11 @@ size = Vector3(50, 0.4, 50)
 
 [node name="TempCharacter" parent="." unique_id=1436382204 instance=ExtResource("1_itxqv")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.8509827, 0.7000003, -1.0004587)
+input_left = "player_turnleft"
+input_right = "player_turnright"
+input_forward = "player_forward"
+input_back = "player_reverse"
+
+[node name="CSGBox3D" type="CSGBox3D" parent="TempCharacter" unique_id=839068601]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8.200001, 0)
+material_override = SubResource("StandardMaterial3D_ai20r")

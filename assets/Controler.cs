@@ -5,8 +5,6 @@ using System.Runtime.InteropServices.JavaScript;
 public partial class Controler : CharacterBody3D
 {
 	[Export]
-	public float Speed = 5.0f;
-	[Export]
 	public float JumpVelocity = 4.5f;
 
     // Mouse Controls (Setup)
@@ -14,6 +12,14 @@ public partial class Controler : CharacterBody3D
     [Export] public float mouseSensitivity = 0.5f;
     private float _cameraXRotation;
     [Export] public Camera3D camera;
+
+    [ExportGroup("VehicleStuff")]
+    [Export]
+    public float speed = 0.0f;
+    [Export]
+    public float acceleration = 0.5f;
+    [Export]
+    public float maxSpeed = 10.0f;
 
     [ExportGroup("Input Actions")]
     [Export]
@@ -52,13 +58,13 @@ public partial class Controler : CharacterBody3D
 		Vector3 direction = (Transform.Basis * new Vector3(inputDir.X, 0, inputDir.Y)).Normalized();
 		if (direction != Vector3.Zero)
 		{
-			velocity.X = direction.X * Speed;
-			velocity.Z = direction.Z * Speed;
+			velocity.X = direction.X * this.acceleration;
+			velocity.Z = direction.Z * this.acceleration;
 		}
 		else
 		{
-			velocity.X = Mathf.MoveToward(Velocity.X, 0, Speed);
-			velocity.Z = Mathf.MoveToward(Velocity.Z, 0, Speed);
+			velocity.X = Mathf.MoveToward(Velocity.X, 0, this.speed);
+			velocity.Z = Mathf.MoveToward(Velocity.Z, 0, this.speed);
 		}
 
 		Velocity = velocity;
