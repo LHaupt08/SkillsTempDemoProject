@@ -11,15 +11,28 @@ public partial class Controler : CharacterBody3D
     private Vector2 _mouseDelta;
     [Export] public float mouseSensitivity = 0.5f;
     private float _cameraXRotation;
-    [Export] public Camera3D camera;
+    [Export] 
+    public Camera3D camera;
+    [Export]
+    private Label3D debugVelocity;
+    [Export]
+    private Label3D debugSpeed;
+    [Export]
+    private Label3D debugAccel;
+    [Export]
+    private Label3D debugDecel;
 
     [ExportGroup("VehicleStuff")]
     [Export]
-    public float speed = 0.0f;
+    public float curSpeed = 0.2f;
     [Export]
-    public float acceleration = 0.5f;
+    public float minSpeed = 0.2f;
     [Export]
-    public float maxSpeed = 10.0f;
+    public float maxSpeed = 60.0f;
+    [Export]
+    public float acceleration = 0.81f;
+    [Export]
+    public float deceleration = 0.35f;
 
     [ExportGroup("Input Actions")]
     [Export]
@@ -35,10 +48,11 @@ public partial class Controler : CharacterBody3D
 	[Export]
 	public string input_release = "ui_cancel";
 
-
     public override void _PhysicsProcess(double delta)
 	{
-		Vector3 velocity = Velocity;
+        debugAccel.Text = Convert.ToString(acceleration);
+        debugDecel.Text = Convert.ToString(deceleration);
+        Vector3 velocity = Velocity;
 
 		// Add the gravity.
 		if (!IsOnFloor())
@@ -58,19 +72,62 @@ public partial class Controler : CharacterBody3D
 		Vector3 direction = (Transform.Basis * new Vector3(inputDir.X, 0, inputDir.Y)).Normalized();
 		if (direction != Vector3.Zero)
 		{
-			velocity.X = direction.X * this.acceleration;
-			velocity.Z = direction.Z * this.acceleration;
-		}
+            if (curSpeed >= maxSpeed)
+            {
+
+                this.curSpeed = maxSpeed;
+
+            }
+            else
+            {
+
+                if (curSpeed < 10)
+                {
+                    this.curSpeed += 0.3f;
+                }
+                if (curSpeed > 45)
+                {
+                    this.curSpeed -= 1.8f;
+                }
+
+                this.curSpeed /= acceleration;   
+
+            }
+            
+            velocity.X = direction.X * this.curSpeed;
+            velocity.Z = direction.Z * this.curSpeed;
+
+        }
 		else
 		{
-			velocity.X = Mathf.MoveToward(Velocity.X, 0, this.speed);
-			velocity.Z = Mathf.MoveToward(Velocity.Z, 0, this.speed);
+            if (curSpeed <= minSpeed)
+            {
+                this.curSpeed = minSpeed;
+            }
+            else
+            {
+
+                if (curSpeed > 45)
+                {
+                    this.curSpeed += 5f;
+                }
+                this.curSpeed *= deceleration;
+
+            }
+
+            velocity.X = Mathf.MoveToward(Velocity.X, 0, (this.curSpeed+deceleration));
+            velocity.Z = Mathf.MoveToward(Velocity.Z, 0, (this.curSpeed+deceleration));
+            
 		}
 
 		Velocity = velocity;
 		MoveAndSlide();
 		ProcessLook();
-	}
+
+        debugSpeed.Text = Convert.ToString(this.curSpeed);
+        debugVelocity.Text = "( " + Convert.ToString(Velocity.X) + ", " + Convert.ToString(Velocity.Y) + ", " + Convert.ToString(Velocity.Z) + " )";
+
+    }
 
     private void ProcessLook()
     {
@@ -85,7 +142,11 @@ public partial class Controler : CharacterBody3D
         }
 
         _mouseDelta = Vector2.Zero;
+
+        debugVelocity.Text = "( " + Convert.ToString(Velocity.X) + ", " + Convert.ToString(Velocity.Y) + ", " + Convert.ToString(Velocity.Z) + " )";
     }
+
+    // Camera
 
     public override void _Input(InputEvent @event)
     {
@@ -116,7 +177,7 @@ public partial class Controler : CharacterBody3D
         {
             GetTree().Paused = paused;
 
-            if (paused)
+           if (paused)
             {
                 Input.MouseMode = Input.MouseModeEnum.Visible;
             }
