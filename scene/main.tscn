@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://dti7okakmq7r2"]
 
-[ext_resource type="PackedScene" uid="uid://1rrg8owl1pr3" path="res://scene/character_body_3d.tscn" id="1_itxqv"]
-[ext_resource type="Script" uid="uid://f2dcsucyofdh" path="res://scene/PauseManager.cs" id="2_v0l8b"]
+[ext_resource type="Script" uid="uid://f2dcsucyofdh" path="res://script/PauseManager.cs" id="2_v0l8b"]
+[ext_resource type="PackedScene" uid="uid://1rrg8owl1pr3" path="res://scene/character_body_3d.tscn" id="2_wp4xf"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_v0l8b"]
 metallic = 1.0
@@ -27,6 +27,8 @@ ambient_light_source = 2
 ambient_light_color = Color(0.99999994, 0.1964511, 0.80846196, 1)
 
 [node name="main" type="Node3D" unique_id=1415652804]
+
+[node name="player" parent="." unique_id=1698073003 instance=ExtResource("2_wp4xf")]
 
 [node name="floor" type="CSGBox3D" parent="." unique_id=1984546411]
 material_override = SubResource("StandardMaterial3D_v0l8b")
@@ -54,9 +56,6 @@ light_volumetric_fog_energy = 11.805
 light_angular_distance = 16.04
 light_specular = 4.644
 shadow_enabled = true
-
-[node name="CharacterBody3D" parent="." unique_id=1698073003 instance=ExtResource("1_itxqv")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.3667755, 9.305161, 0)
 
 [node name="PauseManager" type="Node" parent="." unique_id=517406472]
 process_mode = 3
