@@ -45,7 +45,8 @@ shadow_enabled = true
 [node name="TempCharacter" parent="." unique_id=1436382204 instance=ExtResource("1_itxqv")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.8509827, 0.7000003, -1.0004587)
 acceleration = 0.96
-deceleration = 0.23
+deceleration = 0.15
+breakDeceleration = 0.4
 input_left = "player_turnleft"
 input_right = "player_turnright"
 input_forward = "player_forward"

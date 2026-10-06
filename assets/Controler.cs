@@ -24,15 +24,17 @@ public partial class Controler : CharacterBody3D
 
     [ExportGroup("VehicleStuff")]
     [Export]
-    public float curSpeed = 0.2f;
+    public float curSpeed = 0.0f;
     [Export]
-    public float minSpeed = 0.2f;
+    public float minSpeed = 0.0f;
     [Export]
     public float maxSpeed = 60.0f;
     [Export]
     public float acceleration = 0.81f;
     [Export]
     public float deceleration = 0.35f;
+    [Export]
+    public float breakDeceleration = 0.22f;
 
     [ExportGroup("Input Actions")]
     [Export]
@@ -72,30 +74,60 @@ public partial class Controler : CharacterBody3D
 		Vector3 direction = (Transform.Basis * new Vector3(inputDir.X, 0, inputDir.Y)).Normalized();
 		if (direction != Vector3.Zero)
 		{
-            if (curSpeed >= maxSpeed)
+
+            if (curSpeed >= 0)
             {
 
-                this.curSpeed = maxSpeed;
+                if (Input.IsActionPressed(input_forward))
+                {
+
+                    if (curSpeed >= maxSpeed)
+                    {
+
+                        this.curSpeed = maxSpeed;
+
+                    }
+                    else
+                    {
+
+                        if (curSpeed < 10)
+                        {
+                            this.curSpeed += 0.3f;
+                        }
+                        if (curSpeed > 45)
+                        {
+                            this.curSpeed -= 1.8f;
+                        }
+
+                        this.curSpeed /= acceleration;
+
+                    }
+
+                    velocity.X = direction.X * this.curSpeed;
+                    velocity.Z = direction.Z * this.curSpeed;
+
+                }
+
+                if (curSpeed > 0 && Input.IsActionPressed(input_back))
+                {
+
+                    if (curSpeed <= minSpeed)
+                    {
+                        this.curSpeed = minSpeed;
+                    }
+                    else
+                    {
+
+                        this.curSpeed *= breakDeceleration;
+
+                    }
+
+                    velocity.X = Mathf.MoveToward(Velocity.X, 0, (this.curSpeed + breakDeceleration));
+                    velocity.Z = Mathf.MoveToward(Velocity.Z, 0, (this.curSpeed + breakDeceleration));
+
+                }
 
             }
-            else
-            {
-
-                if (curSpeed < 10)
-                {
-                    this.curSpeed += 0.3f;
-                }
-                if (curSpeed > 45)
-                {
-                    this.curSpeed -= 1.8f;
-                }
-
-                this.curSpeed /= acceleration;   
-
-            }
-            
-            velocity.X = direction.X * this.curSpeed;
-            velocity.Z = direction.Z * this.curSpeed;
 
         }
 		else
@@ -109,7 +141,7 @@ public partial class Controler : CharacterBody3D
 
                 if (curSpeed > 45)
                 {
-                    this.curSpeed += 5f;
+                    this.curSpeed += 8f;
                 }
                 this.curSpeed *= deceleration;
 
