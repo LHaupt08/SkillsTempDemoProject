@@ -47,6 +47,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.8509827, 0.7000003, -1.0004
 acceleration = 0.96
 deceleration = 0.15
 breakDeceleration = 0.4
+revAcceleration = 1.0
 input_left = "player_turnleft"
 input_right = "player_turnright"
 input_forward = "player_forward"

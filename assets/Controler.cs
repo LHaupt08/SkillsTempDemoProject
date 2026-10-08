@@ -35,6 +35,12 @@ public partial class Controler : CharacterBody3D
     public float deceleration = 0.35f;
     [Export]
     public float breakDeceleration = 0.22f;
+    [Export]
+    public float revMaxSpeed = 10.0f;
+    [Export]
+    public float revAcceleration = 0.6f;
+    [Export]
+    public float revDeceleration = 0.2f;
 
     [ExportGroup("Input Actions")]
     [Export]
@@ -108,6 +114,8 @@ public partial class Controler : CharacterBody3D
 
                 }
 
+                // Break
+
                 if (curSpeed > 0 && Input.IsActionPressed(input_back))
                 {
 
@@ -125,12 +133,44 @@ public partial class Controler : CharacterBody3D
                     velocity.X = Mathf.MoveToward(Velocity.X, 0, (this.curSpeed + breakDeceleration));
                     velocity.Z = Mathf.MoveToward(Velocity.Z, 0, (this.curSpeed + breakDeceleration));
 
+                    if (velocity.X < 0.1f || velocity.X > -0.1f && curSpeed == 0) { velocity.X = 0; }
+                    if (velocity.Z < 0.1f || velocity.Z > -0.1f && curSpeed == 0) { velocity.Z = 0; }
+
+                }
+
+                if (velocity.X <= (revMaxSpeed/2) & velocity.Z <= (revMaxSpeed/2) & velocity.X >= (-(revMaxSpeed)/2) & velocity.Z >= (-(revMaxSpeed) / 2))
+            {
+
+                if (Input.IsActionPressed(input_back)){
+
+                    if (curSpeed <= revMaxSpeed)
+                    {
+
+                        this.curSpeed = revMaxSpeed;
+
+                    }
+                    else
+                    {
+                        if (curSpeed < 2)
+                        {
+                            this.curSpeed = 0.1f;
+                        }
+
+                        this.curSpeed /= revAcceleration;
+
+                    }
+
+                    velocity.X = direction.X * this.curSpeed;
+                    velocity.Z = direction.Z * this.curSpeed;
+
                 }
 
             }
 
+            }
+
         }
-		else
+        else
 		{
             if (curSpeed <= minSpeed)
             {
@@ -211,11 +251,11 @@ public partial class Controler : CharacterBody3D
 
            if (paused)
             {
-                Input.MouseMode = Input.MouseModeEnum.Visible;
+                //Input.MouseMode = Input.MouseModeEnum.Visible;
             }
             else
             {
-                Input.MouseMode = Input.MouseModeEnum.Captured;
+                //Input.MouseMode = Input.MouseModeEnum.Captured;
             }
         }
     
