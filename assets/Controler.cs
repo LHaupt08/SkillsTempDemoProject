@@ -4,14 +4,14 @@ using System.Runtime.InteropServices.JavaScript;
 
 public partial class Controler : CharacterBody3D
 {
-	[Export]
-	public float JumpVelocity = 4.5f;
+    [Export]
+    public float JumpVelocity = 4.5f;
 
     // Mouse Controls (Setup)
     private Vector2 _mouseDelta;
     [Export] public float mouseSensitivity = 0.5f;
     private float _cameraXRotation;
-    [Export] 
+    [Export]
     public Camera3D camera;
     [Export]
     private Label3D debugVelocity;
@@ -21,6 +21,10 @@ public partial class Controler : CharacterBody3D
     private Label3D debugAccel;
     [Export]
     private Label3D debugDecel;
+    [Export]
+    private Label3D debugIsReversable;
+    [Export]
+    private Label3D debugIsBreaking;
 
     [ExportGroup("VehicleStuff")]
     [Export]
@@ -35,6 +39,10 @@ public partial class Controler : CharacterBody3D
     public float deceleration = 0.35f;
     [Export]
     public float breakDeceleration = 0.22f;
+    [Export]
+    public bool isAbleToReverse = true;
+    [Export]
+    public bool isBreaking = false;
     [Export]
     public float revMaxSpeed = 10.0f;
     [Export]
@@ -78,7 +86,8 @@ public partial class Controler : CharacterBody3D
 		// As good practice, you should replace UI actions with custom gameplay actions.
 		Vector2 inputDir = Input.GetVector(input_left, input_right, input_forward, input_back);
 		Vector3 direction = (Transform.Basis * new Vector3(inputDir.X, 0, inputDir.Y)).Normalized();
-		if (direction != Vector3.Zero)
+        Vector3 xDirection = (Transform.Basis * new Vector3(0, 0, inputDir.Y)).Normalized();
+		if (xDirection != Vector3.Zero)
 		{
 
             if (curSpeed >= 0)
@@ -112,12 +121,15 @@ public partial class Controler : CharacterBody3D
                     velocity.X = direction.X * this.curSpeed;
                     velocity.Z = direction.Z * this.curSpeed;
 
+                    isAbleToReverse = false;
+
                 }
 
                 // Break
 
-                if (curSpeed > 0 && Input.IsActionPressed(input_back))
+                if (curSpeed > 0 && Input.IsActionPressed(input_back) && isAbleToReverse == false)
                 {
+                    isBreaking = true;
 
                     if (curSpeed <= minSpeed)
                     {
@@ -133,17 +145,19 @@ public partial class Controler : CharacterBody3D
                     velocity.X = Mathf.MoveToward(Velocity.X, 0, (this.curSpeed + breakDeceleration));
                     velocity.Z = Mathf.MoveToward(Velocity.Z, 0, (this.curSpeed + breakDeceleration));
 
-                    if (velocity.X < 0.1f || velocity.X > -0.1f && curSpeed == 0) { velocity.X = 0; }
-                    if (velocity.Z < 0.1f || velocity.Z > -0.1f && curSpeed == 0) { velocity.Z = 0; }
+                    if (velocity.X < 0.01f || velocity.X > -0.01f && curSpeed == 0) { velocity.X = 0; }
+                    if (velocity.Z < 0.01f || velocity.Z > -0.01f && curSpeed == 0) { velocity.Z = 0; }
 
+                } else
+                {
+                    isBreaking = false;
                 }
 
-                if (velocity.X <= (revMaxSpeed/2) & velocity.Z <= (revMaxSpeed/2) & velocity.X >= (-(revMaxSpeed)/2) & velocity.Z >= (-(revMaxSpeed) / 2))
-            {
+                // Reverse
+                if (isAbleToReverse == true & Input.IsActionPressed(input_back))
+                {
 
-                if (Input.IsActionPressed(input_back)){
-
-                    if (curSpeed <= revMaxSpeed)
+                    if (curSpeed >= revMaxSpeed)
                     {
 
                         this.curSpeed = revMaxSpeed;
@@ -151,27 +165,27 @@ public partial class Controler : CharacterBody3D
                     }
                     else
                     {
-                        if (curSpeed < 2)
+
+                        if (curSpeed == 0)
                         {
-                            this.curSpeed = 0.1f;
+                            this.curSpeed += 0.3f;
                         }
 
                         this.curSpeed /= revAcceleration;
 
                     }
 
-                    velocity.X = direction.X * this.curSpeed;
-                    velocity.Z = direction.Z * this.curSpeed;
+                    velocity.X = xDirection.X * (this.curSpeed + revAcceleration);
+                    velocity.Z = xDirection.Z * (this.curSpeed + revAcceleration);
 
                 }
-
-            }
 
             }
 
         }
         else
 		{
+
             if (curSpeed <= minSpeed)
             {
                 this.curSpeed = minSpeed;
@@ -189,6 +203,13 @@ public partial class Controler : CharacterBody3D
 
             velocity.X = Mathf.MoveToward(Velocity.X, 0, (this.curSpeed+deceleration));
             velocity.Z = Mathf.MoveToward(Velocity.Z, 0, (this.curSpeed+deceleration));
+
+            if (velocity.X == 0 & velocity.Z == 0 & curSpeed== 0 & !(Input.IsActionPressed(input_back)))
+            {
+
+                isAbleToReverse = true;
+
+            }
             
 		}
 
@@ -198,6 +219,8 @@ public partial class Controler : CharacterBody3D
 
         debugSpeed.Text = Convert.ToString(this.curSpeed);
         debugVelocity.Text = "( " + Convert.ToString(Velocity.X) + ", " + Convert.ToString(Velocity.Y) + ", " + Convert.ToString(Velocity.Z) + " )";
+        debugIsReversable.Text = Convert.ToString(isAbleToReverse);
+        debugIsBreaking.Text = Convert.ToString(isBreaking);
 
     }
 
