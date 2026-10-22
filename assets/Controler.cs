@@ -26,7 +26,7 @@ public partial class Controler : CharacterBody3D
     [Export]
     private Label3D debugIsBreaking;
 
-    [ExportGroup("VehicleStuff")]
+    [ExportGroup("VehicleXSpeed")]
     [Export]
     public float curSpeed = 0.0f;
     [Export]
@@ -49,6 +49,19 @@ public partial class Controler : CharacterBody3D
     public float revAcceleration = 0.6f;
     [Export]
     public float revDeceleration = 0.2f;
+
+    [ExportGroup("VehicleTurning")]
+    [Export]
+    public float turnSpeed;
+    [Export]
+    public float maxTurnSpeed;
+
+    [Export]
+    public float turnAcceleration;
+    [Export]
+    public float turnDeceleration;
+    [Export]
+    public bool isAbleToTurn = true;
 
     [ExportGroup("Input Actions")]
     [Export]
@@ -85,8 +98,14 @@ public partial class Controler : CharacterBody3D
 		// Get the input direction and handle the movement/deceleration.
 		// As good practice, you should replace UI actions with custom gameplay actions.
 		Vector2 inputDir = Input.GetVector(input_left, input_right, input_forward, input_back);
+
 		Vector3 direction = (Transform.Basis * new Vector3(inputDir.X, 0, inputDir.Y)).Normalized();
+
         Vector3 xDirection = (Transform.Basis * new Vector3(0, 0, inputDir.Y)).Normalized();
+
+        Vector3 zDirection = (Transform.Basis * new Vector3(inputDir.X, 0, 0)).Normalized();
+
+        // Handles For/Back Movement.
 		if (xDirection != Vector3.Zero)
 		{
 
@@ -123,6 +142,30 @@ public partial class Controler : CharacterBody3D
 
                     isAbleToReverse = false;
 
+                    // Handles Turning
+                    if (zDirection != Vector3.Zero)
+                    {
+
+                        if ((Input.IsActionPressed(input_left) || Input.IsActionPressed(input_right)) & isAbleToTurn == true)
+                        {
+
+                            if (turnSpeed >= maxTurnSpeed)
+                            {
+
+                                this.turnSpeed = maxTurnSpeed;
+
+                            }
+                            else
+                            {
+
+                                this.turnSpeed /= turnAcceleration;
+
+                            }
+
+                        }
+
+                    }
+
                 }
 
                 // Break
@@ -148,7 +191,8 @@ public partial class Controler : CharacterBody3D
                     if (velocity.X < 0.01f || velocity.X > -0.01f && curSpeed == 0) { velocity.X = 0; }
                     if (velocity.Z < 0.01f || velocity.Z > -0.01f && curSpeed == 0) { velocity.Z = 0; }
 
-                } else
+                } 
+                else
                 {
                     isBreaking = false;
                 }
