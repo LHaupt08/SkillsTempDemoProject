@@ -5,13 +5,14 @@
 [sub_resource type="BoxShape3D" id="BoxShape3D_ai20r"]
 size = Vector3(1.2, 1, 1.2)
 
-[node name="TempCharacter" type="CharacterBody3D" unique_id=1436382204 node_paths=PackedStringArray("camera", "debugVelocity", "debugSpeed", "debugAccel", "debugDecel", "debugIsReversable", "debugIsBreaking")]
+[node name="TempCharacter" type="CharacterBody3D" unique_id=1436382204 node_paths=PackedStringArray("camera", "debugVelocity", "debugSpeed", "debugAccel", "debugDecel", "debugTurn", "debugIsReversable", "debugIsBreaking")]
 script = ExtResource("1_si3wx")
 camera = NodePath("Head/Camera3D")
 debugVelocity = NodePath("Head/Camera3D/DeVelocityText")
 debugSpeed = NodePath("Head/Camera3D/DeSpeedText")
 debugAccel = NodePath("Head/Camera3D/DeAcceleration")
 debugDecel = NodePath("Head/Camera3D/DeDeceleration")
+debugTurn = NodePath("Head/Camera3D/DeTurnValue")
 debugIsReversable = NodePath("Head/Camera3D/DeIsReversableText")
 debugIsBreaking = NodePath("Head/Camera3D/DeIsBreaking")
 acceleration = 0.99
@@ -61,6 +62,15 @@ horizontal_alignment = 0
 
 [node name="DeDeceleration" type="Label3D" parent="Head/Camera3D" unique_id=390618562]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.5387727, -0.28994364, -0.6)
+layers = 2
+pixel_size = 0.001
+text = "0
+
+"
+horizontal_alignment = 0
+
+[node name="DeTurnValue" type="Label3D" parent="Head/Camera3D" unique_id=1483054156]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.48733088, -0.22883719, -0.6)
 layers = 2
 pixel_size = 0.001
 text = "0

@@ -42,13 +42,14 @@ environment = SubResource("Environment_brvut")
 transform = Transform3D(-0.8660254, -0.43301278, 0.25, 0, 0.49999997, 0.86602545, -0.50000006, 0.75, -0.43301266, 0, 0, 0)
 shadow_enabled = true
 
-[node name="TempCharacter" parent="." unique_id=1436382204 instance=ExtResource("1_itxqv")]
+[node name="TempCharacter" parent="." unique_id=1436382204 node_paths=PackedStringArray("player") instance=ExtResource("1_itxqv")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.8509827, 0.7000003, -1.0004587)
+player = NodePath(".")
 acceleration = 0.96
 deceleration = 0.15
 breakDeceleration = 0.44
-turnSpeed = 20.0
-turnAcceleration = 1.0
+maxTurnSpeed = 0.2
+turnAcceleration = 0.001
 input_left = "player_turnleft"
 input_right = "player_turnright"
 input_forward = "player_forward"
