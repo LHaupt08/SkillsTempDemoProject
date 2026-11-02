@@ -136,15 +136,15 @@ public partial class Controler : CharacterBody3D
                 else
                 {
                     turnSpeed += turnUp;
-                    turnSpeed /= turnAcceleration;
+                    turnSpeed /= (turnAcceleration * ((float)Math.PI / 180f));
                     turnSpeed = ((turnSpeed * ((float)Math.PI / 180f))*(float)delta)*dirOfTurn;
-                    if (turnSpeed < .5f)
+                    if (turnSpeed < maxTurnSpeed)
                     {
                         turnUp += startingTurnPlus;
-                        if (turnUp >= .5f)
+                        /*if (turnUp >= .5f)
                         {
                             turnUp = .5f;
-                        }
+                        }*/
                     }
                 }
 
@@ -158,7 +158,7 @@ public partial class Controler : CharacterBody3D
 
             if (turnSpeed > 0)
             {
-                turnSpeed -= (maxTurnSpeed*5)*(float)delta;
+                turnSpeed -= (maxTurnSpeed*2)*(float)delta;
                 if (turnSpeed < 0)
                 {
                     turnSpeed = 0f;
@@ -166,7 +166,7 @@ public partial class Controler : CharacterBody3D
             }
             else if (turnSpeed < 0)
             {
-                turnSpeed += (maxTurnSpeed * 5) * (float)delta;
+                turnSpeed += (maxTurnSpeed*2) * (float)delta;
                 if (turnSpeed > 0)
                 {
                     turnSpeed = 0f;
@@ -317,7 +317,7 @@ public partial class Controler : CharacterBody3D
 		MoveAndSlide();
 		ProcessLook();
 
-        debugAccel.Text = Convert.ToString(acceleration);
+        debugAccel.Text = Convert.ToString(turnAcceleration * ((float)Math.PI / 180f));
         debugDecel.Text = Convert.ToString(turnSpeed);
 
         debugSpeed.Text = Convert.ToString(this.curSpeed);
