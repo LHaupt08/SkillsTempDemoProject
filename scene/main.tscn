@@ -50,7 +50,6 @@ deceleration = 0.15
 breakDeceleration = 0.44
 maxTurnSpeed = 0.1
 turnAcceleration = 0.1
-isAbleToTurn = false
 input_left = "player_turnleft"
 input_right = "player_turnright"
 input_forward = "player_forward"
@@ -85,3 +84,5 @@ size = Vector3(59.8, 2, 1)
 [node name="CSGBox3D4" type="CSGBox3D" parent="floors" unique_id=2108375046]
 transform = Transform3D(-4.371139e-08, 0, -1, 0, 2, 0, 1, 0, -4.371139e-08, -29.399998, 1.7, -1.9073486e-06)
 size = Vector3(59.8, 2, 1)
+
+[editable path="TempCharacter"]
