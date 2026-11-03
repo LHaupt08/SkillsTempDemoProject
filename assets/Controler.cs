@@ -17,6 +17,8 @@ public partial class Controler : CharacterBody3D
     [Export]
     public Camera3D camera;
     [Export]
+    public Node3D head;
+    [Export]
     private Label3D debugVelocity;
     [Export]
     private Label3D debugSpeed;
@@ -30,6 +32,8 @@ public partial class Controler : CharacterBody3D
     private Label3D debugIsReversable;
     [Export]
     private Label3D debugIsBreaking;
+    [Export]
+    private Label3D mouseTarget;
 
     [ExportGroup("VehicleXSpeed")]
     [Export]
@@ -110,96 +114,104 @@ public partial class Controler : CharacterBody3D
 
         Vector3 zDirection = (Transform.Basis * new Vector3(inputDir.X, 0, 0)).Normalized();
 
-        if (zDirection != Vector3.Zero)
-        {
-
-            if ((Input.IsActionPressed(input_left) || Input.IsActionPressed(input_right)) & isAbleToTurn == true)
-            {
-
-                if (Input.IsActionJustPressed(input_left))
-                {
-                    dirOfTurn = 1;
-                    if (turnUp > startingTurnPlus)
-                    {
-                        turnUp -= startingTurnPlus * 4;
-                    }
-                }
-                else if (Input.IsActionJustPressed(input_right))
-                {
-                    dirOfTurn = -1;
-                    if (turnUp > startingTurnPlus)
-                    {
-                        turnUp -= startingTurnPlus * 4;
-                    }
-                }
-
-                if (turnSpeed >= maxTurnSpeed )
-                {
-                    turnSpeed = maxTurnSpeed;
-                }
-                else if(turnSpeed <= -(maxTurnSpeed))
-                {
-                    turnSpeed = -(maxTurnSpeed);
-                }
-                else
-                {
-                    turnSpeed += turnUp;
-                    turnSpeed /= (turnAcceleration * ((float)Math.PI / 180f));
-                    turnSpeed = ((turnSpeed * ((float)Math.PI / 180f))*(float)delta)*dirOfTurn;
-                    if (turnSpeed < maxTurnSpeed)
-                    {
-                        turnUp += startingTurnPlus;
-                    }
-                }
-
-            }
-            
-
-        }
-        else
-        {
-            dirOfTurn = 0;
-
-            if (turnSpeed > 0)
-            {
-                turnSpeed -= (maxTurnSpeed*2)*(float)delta;
-                if (turnSpeed < 0)
-                {
-                    turnSpeed = 0f;
-                }
-            }
-            else if (turnSpeed < 0)
-            {
-                turnSpeed += (maxTurnSpeed*2) * (float)delta;
-                if (turnSpeed > 0)
-                {
-                    turnSpeed = 0f;
-                }
-            }
-
-            if (turnUp > startingTurnPlus)
-            {
-                turnUp -= startingTurnPlus * 4;
-                if (turnUp < startingTurnPlus)
-                {
-                    turnUp = startingTurnPlus;
-                }
-            }
-
-            if (turnSpeed == 0f)
-            {
-
-                turnUp = startingTurnPlus;
-
-            }
-
-        }
-
-        player.RotateY(turnSpeed);
-
         // Handles For/Back Movement.
         if (xDirection != Vector3.Zero)
 		{
+
+            if (zDirection != Vector3.Zero)
+            {
+
+                if ((Input.IsActionPressed(input_left) || Input.IsActionPressed(input_right)) & isAbleToTurn == true)
+                {
+
+                    if (Input.IsActionJustPressed(input_left))
+                    {
+                        dirOfTurn = 1;
+                        if (turnUp > startingTurnPlus)
+                        {
+                            turnUp -= startingTurnPlus * 4;
+                        }
+                    }
+                    else if (Input.IsActionJustPressed(input_right))
+                    {
+                        dirOfTurn = -1;
+                        if (turnUp > startingTurnPlus)
+                        {
+                            turnUp -= startingTurnPlus * 4;
+                        }
+
+                    }
+
+                    if (turnSpeed >= maxTurnSpeed)
+                    {
+                        turnSpeed = maxTurnSpeed;
+                    }
+                    else if (turnSpeed <= -(maxTurnSpeed))
+                    {
+                        turnSpeed = -(maxTurnSpeed);
+                    }
+                    else
+                    {
+                        turnSpeed += turnUp;
+                        turnSpeed /= (turnAcceleration * ((float)Math.PI / 180f));
+                        turnSpeed = ((turnSpeed * ((float)Math.PI / 180f)) * (float)delta) * dirOfTurn;
+                        if (turnSpeed < maxTurnSpeed)
+                        {
+                            turnUp += startingTurnPlus;
+                        }
+                    }
+
+                    if (turnSpeed == 0f)
+                    {
+
+                        turnUp = startingTurnPlus;
+
+                    }
+
+                }
+
+
+            }
+            else
+            {
+                dirOfTurn = 0;
+
+                if (turnSpeed > 0)
+                {
+                    turnSpeed -= (maxTurnSpeed * 2) * (float)delta;
+                    if (turnSpeed < 0)
+                    {
+                        turnSpeed = 0f;
+                    }
+                }
+                else if (turnSpeed < 0)
+                {
+                    turnSpeed += (maxTurnSpeed * 2) * (float)delta;
+                    if (turnSpeed > 0)
+                    {
+                        turnSpeed = 0f;
+                    }
+                }
+
+                if (turnUp > startingTurnPlus)
+                {
+                    turnUp -= startingTurnPlus * 4;
+                    if (turnUp < startingTurnPlus)
+                    {
+                        turnUp = startingTurnPlus;
+                    }
+                }
+
+                if (turnSpeed == 0f)
+                {
+
+                    turnUp = startingTurnPlus;
+
+                }
+
+            }
+
+            player.RotateY(turnSpeed);
 
             if (curSpeed >= 0)
             {
@@ -230,8 +242,8 @@ public partial class Controler : CharacterBody3D
                     }
 
                     //this.curSpeed = (float)Math.Round(this.curSpeed);
-                    velocity.X = direction.X * this.curSpeed;
-                    velocity.Z = direction.Z * this.curSpeed;
+                    velocity.X = xDirection.X * this.curSpeed;
+                    velocity.Z = xDirection.Z * this.curSpeed;
 
                     isAbleToReverse = false;
 
@@ -328,8 +340,8 @@ public partial class Controler : CharacterBody3D
 		MoveAndSlide();
 		ProcessLook();
 
-        debugAccel.Text = Convert.ToString(turnAcceleration * ((float)Math.PI / 180f));
-        debugDecel.Text = Convert.ToString(turnSpeed);
+        //debugAccel.Text = Convert.ToString(turnUp);
+        debugDecel.Text = Convert.ToString(head.Rotation.Y);
 
         debugSpeed.Text = Convert.ToString(this.curSpeed);
         debugVelocity.Text = "( " + Convert.ToString(Velocity.X) + ", " + Convert.ToString(Velocity.Y) + ", " + Convert.ToString(Velocity.Z) + " )";
@@ -341,19 +353,26 @@ public partial class Controler : CharacterBody3D
 
     private void ProcessLook()
     {
-        /*var deltaX = _mouseDelta.Y * mouseSensitivity;
+        var deltaX = _mouseDelta.Y * mouseSensitivity;
         var deltaY = -_mouseDelta.X * mouseSensitivity;
+        debugAccel.Text = Convert.ToString(deltaY);
+        head.RotateY(Mathf.DegToRad(deltaY));
+        //head.RotateY((float)Mathf.Clamp(head.Rotation.Y, -0.7854, 0.7854));
+        head.RotateX(head.Rotation.X);
+        head.RotateZ(head.Rotation.X);
 
-        RotateObjectLocal(Vector3.Up, Mathf.DegToRad(deltaY));
         if (_cameraXRotation + deltaX > -90 && _cameraXRotation + deltaX < 90)
         {
             camera.RotateX(Mathf.DegToRad(-deltaX));
             _cameraXRotation += deltaX;
         }
 
+       /* Vector2 mousePos = GetViewport().GetMousePosition();
+
+        mouseTarget.Position = new Vector3(mousePos.X, mousePos.Y, debugAccel.Position.Z);*/
         _mouseDelta = Vector2.Zero;
 
-        debugVelocity.Text = "( " + Convert.ToString(Velocity.X) + ", " + Convert.ToString(Velocity.Y) + ", " + Convert.ToString(Velocity.Z) + " )";*/
+        debugVelocity.Text = "( " + Convert.ToString(Velocity.X) + ", " + Convert.ToString(Velocity.Y) + ", " + Convert.ToString(Velocity.Z) + " )";
     }
 
     // Camera
