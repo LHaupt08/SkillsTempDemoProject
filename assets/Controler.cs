@@ -116,13 +116,21 @@ public partial class Controler : CharacterBody3D
             if ((Input.IsActionPressed(input_left) || Input.IsActionPressed(input_right)) & isAbleToTurn == true)
             {
 
-                if (Input.IsActionPressed(input_left))
+                if (Input.IsActionJustPressed(input_left))
                 {
                     dirOfTurn = 1;
+                    if (turnUp > startingTurnPlus)
+                    {
+                        turnUp -= startingTurnPlus * 4;
+                    }
                 }
-                else if (Input.IsActionPressed(input_right))
+                else if (Input.IsActionJustPressed(input_right))
                 {
                     dirOfTurn = -1;
+                    if (turnUp > startingTurnPlus)
+                    {
+                        turnUp -= startingTurnPlus * 4;
+                    }
                 }
 
                 if (turnSpeed >= maxTurnSpeed )
@@ -141,10 +149,6 @@ public partial class Controler : CharacterBody3D
                     if (turnSpeed < maxTurnSpeed)
                     {
                         turnUp += startingTurnPlus;
-                        /*if (turnUp >= .5f)
-                        {
-                            turnUp = .5f;
-                        }*/
                     }
                 }
 
@@ -175,11 +179,18 @@ public partial class Controler : CharacterBody3D
 
             if (turnUp > startingTurnPlus)
             {
-                turnUp -= startingTurnPlus;
+                turnUp -= startingTurnPlus * 4;
                 if (turnUp < startingTurnPlus)
                 {
                     turnUp = startingTurnPlus;
                 }
+            }
+
+            if (turnSpeed == 0f)
+            {
+
+                turnUp = startingTurnPlus;
+
             }
 
         }
@@ -218,6 +229,7 @@ public partial class Controler : CharacterBody3D
 
                     }
 
+                    //this.curSpeed = (float)Math.Round(this.curSpeed);
                     velocity.X = direction.X * this.curSpeed;
                     velocity.Z = direction.Z * this.curSpeed;
 
@@ -227,11 +239,11 @@ public partial class Controler : CharacterBody3D
 
                 // Break
 
-                if (curSpeed > 0 && Input.IsActionPressed(input_back) && isAbleToReverse == false)
+                if (Input.IsActionPressed(input_back) && isAbleToReverse == false)
                 {
                     isBreaking = true;
 
-                    if (curSpeed <= minSpeed)
+                    if (curSpeed < minSpeed)
                     {
                         this.curSpeed = minSpeed;
                     }
@@ -239,13 +251,11 @@ public partial class Controler : CharacterBody3D
                     {
 
                         this.curSpeed *= breakDeceleration;
+                        this.curSpeed = (float)Math.Round(this.curSpeed, 2);
 
                     }
                     velocity.X = Mathf.MoveToward(Velocity.X, 0, (this.curSpeed + breakDeceleration));
                     velocity.Z = Mathf.MoveToward(Velocity.Z, 0, (this.curSpeed + breakDeceleration));
-
-                    if (velocity.X < 0.01f || velocity.X > -0.01f && curSpeed == 0) { velocity.X = 0; }
-                    if (velocity.Z < 0.01f || velocity.Z > -0.01f && curSpeed == 0) { velocity.Z = 0; }
 
                 } 
                 else
@@ -272,6 +282,7 @@ public partial class Controler : CharacterBody3D
                         }
 
                         this.curSpeed /= revAcceleration;
+                        this.curSpeed = (float)Math.Round(this.curSpeed, 2);
 
                     }
 
@@ -301,8 +312,8 @@ public partial class Controler : CharacterBody3D
 
             }
 
-            velocity.X = Mathf.MoveToward(Velocity.X, 0, (float)Math.Round((this.curSpeed+deceleration), 2)+turnSpeed);
-            velocity.Z = Mathf.MoveToward(Velocity.Z, 0, (float)Math.Round((this.curSpeed + deceleration), 2)+turnSpeed);
+            velocity.X = Mathf.MoveToward(Velocity.X, 0, (float)Math.Round((this.curSpeed+deceleration), 2));
+            velocity.Z = Mathf.MoveToward(Velocity.Z, 0, (float)Math.Round((this.curSpeed + deceleration), 2));
 
             if (velocity.X == 0 & velocity.Z == 0 & curSpeed== 0 & !(Input.IsActionPressed(input_back)))
             {
@@ -330,7 +341,7 @@ public partial class Controler : CharacterBody3D
 
     private void ProcessLook()
     {
-        var deltaX = _mouseDelta.Y * mouseSensitivity;
+        /*var deltaX = _mouseDelta.Y * mouseSensitivity;
         var deltaY = -_mouseDelta.X * mouseSensitivity;
 
         RotateObjectLocal(Vector3.Up, Mathf.DegToRad(deltaY));
@@ -342,7 +353,7 @@ public partial class Controler : CharacterBody3D
 
         _mouseDelta = Vector2.Zero;
 
-        debugVelocity.Text = "( " + Convert.ToString(Velocity.X) + ", " + Convert.ToString(Velocity.Y) + ", " + Convert.ToString(Velocity.Z) + " )";
+        debugVelocity.Text = "( " + Convert.ToString(Velocity.X) + ", " + Convert.ToString(Velocity.Y) + ", " + Convert.ToString(Velocity.Z) + " )";*/
     }
 
     // Camera
