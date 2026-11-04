@@ -11,6 +11,7 @@ public partial class Controler : CharacterBody3D
     // Mouse Controls (Setup)
     private Vector2 _mouseDelta;
     [Export] public float mouseSensitivity = 0.5f;
+    public float headYRotation = 0f;
     private float _cameraXRotation;
     [Export]
     public CharacterBody3D player;
@@ -355,9 +356,19 @@ public partial class Controler : CharacterBody3D
     {
         var deltaX = _mouseDelta.Y * mouseSensitivity;
         var deltaY = -_mouseDelta.X * mouseSensitivity;
-        debugAccel.Text = Convert.ToString(deltaY);
-        head.RotateY(Mathf.DegToRad(deltaY));
-        //head.RotateY((float)Mathf.Clamp(head.Rotation.Y, -0.7854, 0.7854));
+        headYRotation = Mathf.DegToRad(deltaY);
+        debugAccel.Text = Convert.ToString(head.GlobalRotation.Y);
+
+        if (head.Rotation.Y < -Mathf.Pi / 2)
+        {
+            headYRotation = -Mathf.Pi / 2;
+        }
+        else if (head.Rotation.Y > Mathf.Pi / 2)
+        {
+            headYRotation = Mathf.Pi / 2 ;
+        }
+        head.RotateY(headYRotation);
+
         head.RotateX(head.Rotation.X);
         head.RotateZ(head.Rotation.X);
 
