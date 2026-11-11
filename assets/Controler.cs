@@ -356,21 +356,29 @@ public partial class Controler : CharacterBody3D
     {
         var deltaX = _mouseDelta.Y * mouseSensitivity;
         var deltaY = -_mouseDelta.X * mouseSensitivity;
-        headYRotation = Mathf.DegToRad(deltaY);
-        debugAccel.Text = Convert.ToString(head.GlobalRotation.Y);
+        
 
-        if (head.Rotation.Y < -Mathf.Pi / 2)
+        if (head.Rotation.Y + Mathf.DegToRad(deltaY) < -Mathf.Pi / 2 || head.Rotation.Y + Mathf.DegToRad(deltaY) > Mathf.Pi / 2)
         {
-            headYRotation = -Mathf.Pi / 2;
+            headYRotation = 0;
+        }else
+        {
+            headYRotation = Mathf.DegToRad(deltaY);
+        }
+        debugAccel.Text = Convert.ToString(Math.Clamp(head.Rotation.Y, (-Mathf.Pi / 2), (Mathf.Pi / 2)));
+
+        head.RotateX(head.Rotation.X);
+        head.RotateY(headYRotation);
+        head.RotateZ(head.Rotation.Z);
+
+        /*if (head.Rotation.Y < -Mathf.Pi / 2)
+        {
+            headYRotation += 0.1f;
         }
         else if (head.Rotation.Y > Mathf.Pi / 2)
         {
-            headYRotation = Mathf.Pi / 2 ;
-        }
-        head.RotateY(headYRotation);
-
-        head.RotateX(head.Rotation.X);
-        head.RotateZ(head.Rotation.X);
+            headYRotation -= 0.1f;
+        }*/
 
         if (_cameraXRotation + deltaX > -90 && _cameraXRotation + deltaX < 90)
         {
