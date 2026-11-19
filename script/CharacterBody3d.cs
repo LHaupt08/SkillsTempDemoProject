@@ -22,7 +22,7 @@ public partial class CharacterBody3d : CharacterBody3D
 			velocity.Y = JumpVelocity;
 		}
 
-
+		
 		
 		// Get the input direction and handle the movement/deceleration.
 		// As good practice, you should replace UI actions with custom gameplay actions.
@@ -39,10 +39,14 @@ public partial class CharacterBody3d : CharacterBody3D
 			velocity.Z = Mathf.MoveToward(Velocity.Z, 0, Speed);
 		}
 
-		Velocity = velocity;
+		direction = direction.Normalized();
+
+
+        Velocity = velocity;
 		MoveAndSlide();
 		ProcessLook();
 	}
+
 
     // Mouse Controls
     private Vector2 _mouseDelta;
@@ -75,5 +79,6 @@ public partial class CharacterBody3d : CharacterBody3D
 			_mouseDelta += mouseMotion.Relative;
 		}
     }
+
 
 }

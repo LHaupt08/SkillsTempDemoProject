@@ -19,6 +19,13 @@ public partial class GrapplingHook : Node3D
         base._Ready();
         rope.Visible = false;
 
+        
+    }
+
+    public override void _PhysicsProcess(double delta)
+    {
+        base._PhysicsProcess(delta);
+
         ProcessInput();
         ProcessGrapple();
     }
@@ -27,6 +34,7 @@ public partial class GrapplingHook : Node3D
     {
         if (Input.IsActionJustPressed("Grapple"))
         {
+            
             if (_isGrappled)
             {
                 _isGrappled = false;
