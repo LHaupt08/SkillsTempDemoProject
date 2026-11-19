@@ -3,11 +3,16 @@
 [ext_resource type="Script" uid="uid://bvad1jrhnq5tu" path="res://assets/Controler.cs" id="1_si3wx"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_ai20r"]
-size = Vector3(1.2, 1, 1.2)
+size = Vector3(0.4, 1.2, 2.2)
 
-[node name="TempCharacter" type="CharacterBody3D" unique_id=1436382204 node_paths=PackedStringArray("camera", "debugVelocity", "debugSpeed", "debugAccel", "debugDecel", "debugTurn", "debugIsReversable", "debugIsBreaking")]
+[node name="TempCharacter" type="CharacterBody3D" unique_id=1436382204 node_paths=PackedStringArray("player", "camera", "head", "frontWheel", "backWheel", "frontRim", "debugVelocity", "debugSpeed", "debugAccel", "debugDecel", "debugTurn", "debugIsReversable", "debugIsBreaking", "mouseTarget")]
 script = ExtResource("1_si3wx")
+player = NodePath(".")
 camera = NodePath("Head/Camera3D")
+head = NodePath("Head")
+frontWheel = NodePath("Body/Wheels/Front Rim/Front Wheel")
+backWheel = NodePath("Body/Wheels/Back Wheel")
+frontRim = NodePath("Body/Wheels/Front Rim")
 debugVelocity = NodePath("Head/Camera3D/DeVelocityText")
 debugSpeed = NodePath("Head/Camera3D/DeSpeedText")
 debugAccel = NodePath("Head/Camera3D/DeAcceleration")
@@ -15,6 +20,7 @@ debugDecel = NodePath("Head/Camera3D/DeDeceleration")
 debugTurn = NodePath("Head/Camera3D/DeTurnValue")
 debugIsReversable = NodePath("Head/Camera3D/DeIsReversableText")
 debugIsBreaking = NodePath("Head/Camera3D/DeIsBreaking")
+mouseTarget = NodePath("Head/Camera3D/Camera Pointer Concept")
 acceleration = 0.99
 deceleration = 0.25
 
@@ -22,16 +28,40 @@ deceleration = 0.25
 unique_name_in_owner = true
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=1802927478]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.10000004)
 shape = SubResource("BoxShape3D_ai20r")
 
 [node name="Body" type="Node3D" parent="." unique_id=924777277]
 
 [node name="CSGBox3D" type="CSGBox3D" parent="Body" unique_id=476388780]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.09999998, 0)
+size = Vector3(0.2, 0.4, 1)
+
+[node name="CSGBox3D2" type="CSGBox3D" parent="Body" unique_id=465085517]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.29999998, -0.6)
+size = Vector3(0.2, 0.4, 0.6)
+
+[node name="CSGBox3D3" type="CSGBox3D" parent="Body" unique_id=319844183]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.29999998, 0.8)
+size = Vector3(0.2, 0.4, 0.8)
+
+[node name="Wheels" type="Node3D" parent="Body" unique_id=849703434]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.29999998, -0.6)
+
+[node name="Front Rim" type="Node3D" parent="Body/Wheels" unique_id=172930195]
+
+[node name="Front Wheel" type="CSGBox3D" parent="Body/Wheels/Front Rim" unique_id=97394451]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.6, -0.100000024)
+size = Vector3(0.4, 0.6, 0.6)
+
+[node name="Back Wheel" type="CSGBox3D" parent="Body/Wheels" unique_id=548932387]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.6, 1.3)
+size = Vector3(0.4, 0.6, 0.6)
 
 [node name="Head" type="Node3D" parent="." unique_id=1941479842]
 
 [node name="Camera3D" type="Camera3D" parent="Head" unique_id=1046607883]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 1)
 
 [node name="DeVelocityText" type="Label3D" parent="Head/Camera3D" unique_id=1286436526]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.75433725, -0.41008693, -0.6)
@@ -106,5 +136,3 @@ outline_modulate = Color(1, 1, 1, 1)
 text = "X
 "
 horizontal_alignment = 0
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=958403024]
