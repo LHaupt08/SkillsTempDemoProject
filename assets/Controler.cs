@@ -401,8 +401,12 @@ public partial class Controler : CharacterBody3D
         frontRim.RotateY(frontYRotation);
         //------------------------------------------------------------------------------------------
 
+        //velocity += gravity * (float)delta;
+        
         Velocity = velocity;
         MoveAndSlide();
+
+        //for (int i in)
 		ProcessLook();
 
         debugAccel.Text = Convert.ToString(0 - Mathf.RadToDeg(turnSpeed));

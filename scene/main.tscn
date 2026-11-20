@@ -4,8 +4,9 @@
 [ext_resource type="Texture2D" uid="uid://bjhpwl4dwjw1h" path="res://assets/AHHHH2.png" id="2_v0l8b"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_v0l8b"]
-sky_horizon_color = Color(0.66224277, 0.6717428, 0.6867428, 1)
-ground_horizon_color = Color(0.66224277, 0.6717428, 0.6867428, 1)
+sky_top_color = Color(0.81960785, 0.49019608, 0.28235295, 1)
+sky_horizon_color = Color(0.85335386, 0.76325095, 0.7022902, 1)
+ground_horizon_color = Color(0.85335386, 0.76325095, 0.7022902, 1)
 
 [sub_resource type="Sky" id="Sky_wp4xf"]
 sky_material = SubResource("ProceduralSkyMaterial_v0l8b")
@@ -13,7 +14,16 @@ sky_material = SubResource("ProceduralSkyMaterial_v0l8b")
 [sub_resource type="Environment" id="Environment_brvut"]
 background_mode = 2
 sky = SubResource("Sky_wp4xf")
+tonemap_mode = 2
 glow_enabled = true
+volumetric_fog_enabled = true
+volumetric_fog_density = 0.0208
+volumetric_fog_anisotropy = 0.67
+volumetric_fog_length = 32.0
+volumetric_fog_ambient_inject = 0.42
+volumetric_fog_sky_affect = 0.844
+adjustment_enabled = true
+adjustment_contrast = 1.25
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ai20r"]
 albedo_color = Color(0.90605134, 0.5231698, 0.34170476, 1)
@@ -35,12 +45,14 @@ emission_texture = ExtResource("2_v0l8b")
 
 [node name="main" type="Node3D" unique_id=1415652804]
 
-[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=1201690904]
-environment = SubResource("Environment_brvut")
-
-[node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=1702720741]
-transform = Transform3D(-0.8660254, -0.43301278, 0.25, 0, 0.49999997, 0.86602545, -0.50000006, 0.75, -0.43301266, 0, 0, 0)
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=940837142]
+transform = Transform3D(1, -1.0668116e-07, 1.3852832e-07, 0, 0.7922896, 0.61014515, -1.7484555e-07, -0.61014515, 0.7922896, 0, 0, 0)
+light_color = Color(1, 0.627451, 0.2901961, 1)
 shadow_enabled = true
+directional_shadow_max_distance = 196.0
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=1701071075]
+environment = SubResource("Environment_brvut")
 
 [node name="TempCharacter" parent="." unique_id=1436382204 instance=ExtResource("1_itxqv")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.8509827, 0.7000003, -1.0004587)
@@ -60,8 +72,12 @@ material_override = SubResource("StandardMaterial3D_ai20r")
 
 [node name="floors" type="CSGBox3D" parent="." unique_id=302968616]
 transform = Transform3D(8, 0, 0, 0, 1, 0, 0, 0, 8, 0, -0.4, 0)
-material_overlay = SubResource("StandardMaterial3D_itxqv")
+material_override = SubResource("StandardMaterial3D_itxqv")
 use_collision = true
+
+[node name="CSGPolygon3D" type="CSGPolygon3D" parent="floors" unique_id=1692765002]
+transform = Transform3D(-5.4639235e-09, 0, -58.5, 0, 1, 0, 0.125, 0, -2.5571162e-06, -29.449999, 0.6, -28.875)
+polygon = PackedVector2Array(0, 0, 0, 3, 3.6000001, 0, 3.6000001, 0)
 
 [node name="floor" type="CSGBox3D" parent="floors" unique_id=1984546411]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.4, 0)
@@ -73,8 +89,8 @@ transform = Transform3D(1, 0, 0, 0, 2, 0, 0, 0, 1, 0, 1.7, 29.400002)
 size = Vector3(59.8, 2, 1)
 
 [node name="CSGBox3D2" type="CSGBox3D" parent="floors" unique_id=756797234]
-transform = Transform3D(1, 0, 0, 0, 2, 0, 0, 0, 1, 0, 1.7, -29.400002)
-size = Vector3(59.8, 2, 1)
+transform = Transform3D(1, 0, 0, 0, 2, 0, 0, 0, 1, 0, 79.5, -29.400002)
+size = Vector3(59.8, 79.8, 1)
 
 [node name="CSGBox3D3" type="CSGBox3D" parent="floors" unique_id=2090156712]
 transform = Transform3D(-4.371139e-08, 0, -1, 0, 2, 0, 1, 0, -4.371139e-08, 29.400002, 1.7, -1.9073486e-06)
